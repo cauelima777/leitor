@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leitor de Texto ao Passar o Mouse</title>
+</head>
+<body>
+
+<!-- Opção de Ativar/Desativar Leitura de Texto -->
+<div class="container text-center">
+  <button id="toggleSpeechButton" class="btn btn-primary" onclick="toggleSpeech()">Ativar Leitura</button>
+</div>
+
+<h1 onmouseover="readText(this)" onmouseout="stopSpeaking()">Texto do Cabeçalho</h1>
+
+<p onmouseover="readText(this)" onmouseout="stopSpeaking()">Texto do Parágrafo</p>
+
+<script>
+  const synth = window.speechSynthesis;
+  let speaking = false;
+  let speechEnabled = false;
+
+  function toggleSpeech() {
+      speechEnabled = !speechEnabled;
+      document.getElementById('toggleSpeechButton').innerText = speechEnabled ? 'Desativar Leitura' : 'Ativar Leitura';
+  }
+
+  function readText(element) {
+      if (speechEnabled && !speaking) {
+          const utterance = new SpeechSynthesisUtterance(element.innerText);
+          synth.speak(utterance);
+          speaking = true;
+          utterance.onend = () => {
+              speaking = false;
+          };
+      }
+  }
+
+  function stopSpeaking() {
+      synth.cancel(); // Stop any speech currently being spoken
+      speaking = false; // Reset speaking status
+  }
+</script>
+
+</body>
+</html>
